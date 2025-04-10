@@ -1,0 +1,129 @@
+
+body{
+    background-color: #201b2c;
+}
+.container{
+    display: flex;    
+}
+.logotipo{
+    flex:1;
+    display: flex;
+}
+.YOSHI img{
+    height: 108px;
+}
+.nome-site{
+    display: flex;
+    align-items: center;
+    margin-left: 96px;
+    color: whitesmoke;
+    font-size: 40px;
+    font-family: "Open Sans";
+}
+.links{
+    flex: 2;
+    justify-content: right;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.links a{
+    margin-right: 80px;
+    text-decoration: none;
+    color: whitesmoke;
+    font-family: "Open Sans";
+    font-size: 20px;
+    font-weight: bolder;
+}
+.links a:hover{
+    transform: scale(1.2);
+    color: chocolate;
+}
+.games{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.card-game{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 45px;
+}
+.img-game{
+    height: 300px;
+    width: 250px;
+}
+.card-title{
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    font-family: monospace;
+}
+.btn-download{
+    text-decoration: none;
+    color: whitesmoke;
+    background-color: olivedrab;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 10px;
+}
+.btn-download:hover{
+    transform: scale(1.2);
+}
+.carrinho-lateral {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 300px;
+    background-color: #000000bb;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: monospace;
+    z-index: 999;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.item-carrinho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+.item-carrinho img {
+    border-radius: 5px;
+    height: 40px;
+}
+.item-carrinho button {
+    background-color: crimson;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.item-carrinho button:hover {
+    background-color: darkred;
+    transform: scale(1.05);
+}
+.btn-finalizar {
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-finalizar:hover {
+    background-color: darkgreen;
+    transform: scale(1.05);
+}
+
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Finalizar Compra</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    #lista-pedidos{
+        display: flex;
+        flex-direction: row;
+    }
+
+    body {
+      background-color: #162464;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+    }
+
+    .pedido {
+      border: 1px solid #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      /* margin-right: 1000px; */
+      margin: 30px;
+      width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .capa{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+    }
+    .btn-comprar {
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-comprar:hover {
+      background-color: darkgreen;
+      transform: scale(1.05);
+    }
+
+    .remover-btn {
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .remover-btn:hover {
+      background-color: darkred;
+      transform: scale(1.1);
+    }
+
+    /* Modal Estilizado */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-conteudo {
+      background-color: #1e1e2f;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      font-family: monospace;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    .botoes {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    img{
+        height: 100px;
+    }
+
+    .cancelar {
+      background-color: crimson;
+    }
+
+    .cancelar:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛍️ Finalizar Compra</h1>
+  <div id="lista-pedidos">
+
+  </div>
+  <p id="total-pedido" style="display: flex;"></p>
+  <button class="btn-comprar" onclick="mostrarModal()">Comprar</button>
+  <button class="btn-comprar"><a href="homepage.html">Voltar</a></button>
+
+  <!-- Modal de confirmação -->
+  <div id="modal-confirmacao" class="modal">
+    <div class="modal-conteudo">
+      <h2>Confirmar compra</h2>
+      <p>Tem certeza que deseja finalizar sua compra?</p>
+      <div class="botoes">
+        <button class="btn-comprar" onclick="confirmarCompra()">Confirmar</button>
+        <button class="btn-comprar cancelar" onclick="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let carrinho = JSON.parse(localStorage.getItem("carrinhoFinalizado")) || [];
+
+    const lista = document.getElementById("lista-pedidos");
+    const totalPedido = document.getElementById("total-pedido");
+
+    function renderizarCarrinho() {
+      lista.innerHTML = "";
+      let total = 0;
+
+      carrinho.forEach((item, index) => {
+        total += item.preco;
+        lista.innerHTML += `
+          <div class="pedido">
+            <div class="capa">
+                <img src="${item.imagem}">
+              <strong>${item.nome}</strong><br>
+              Preço: R$ ${item.preco.toFixed(2)}
+            </div>
+            <button class="remover-btn" onclick="removerItem(${index})">✕</button>
+          </div>
+        `;
+      });
+
+      totalPedido.innerHTML = `<strong>Total:</strong> R$ ${total.toFixed(2)}`;
+    }
+
+    function removerItem(index) {
+      carrinho.splice(index, 1);
+      localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
+      renderizarCarrinho();
+    }
+
+    function mostrarModal() {
+      if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+      }
+      document.getElementById("modal-confirmacao").style.display = "flex";
+    }
+
+    function fecharModal() {
+      document.getElementById("modal-confirmacao").style.display = "none";
+    }
+
+    function confirmarCompra() {
+      alert("Compra realizada com sucesso! 🎉");
+      localStorage.removeItem("carrinhoFinalizado");
+      window.location.href = "index.html";
+    }
+
+    renderizarCarrinho();
+  </script>
+</body>
+</html>
