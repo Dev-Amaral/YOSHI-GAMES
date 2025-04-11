@@ -127,3 +127,15 @@ body{
 }
 
 
+.btn-carrinho {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    margin-left: 10px;
+  }
+  .btn-carrinho:hover {
+    transform: scale(1.2);
+  }
+  

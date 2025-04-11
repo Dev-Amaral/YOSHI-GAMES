@@ -150,15 +150,15 @@
           <div class="pedido">
             <div class="capa">
                 <img src="${item.imagem}">
-              <strong>${item.nome}</strong><br>
-              Preço: R$ ${item.preco.toFixed(2)}
+              <strong ><p style="font-size:30px; margin:19px;">${item.nome}</strong></p><br>
+              <p style="font-size:30px; margin:19px;">Preço: R$ ${item.preco.toFixed(2)}</p>
             </div>
             <button class="remover-btn" onclick="removerItem(${index})">✕</button>
           </div>
         `;
       });
 
-      totalPedido.innerHTML = `<strong>Total:</strong> R$ ${total.toFixed(2)}`;
+      totalPedido.innerHTML = `<strong><p>Total:</strong> R$ ${total.toFixed(2)}</p>`;
     }
 
     function removerItem(index) {
@@ -186,6 +186,22 @@
     }
 
     renderizarCarrinho();
+    const previsao = calcularDataEntrega();
+totalPedido.innerHTML += `<br><br><p><strong>📦 Entrega prevista até:</strong><p> ${previsao}`;
+
+    function calcularDataEntrega() {
+  const hoje = new Date();
+  let diasAdicionados = 0;
+  while (diasAdicionados < 5) {
+    hoje.setDate(hoje.getDate() + 1);
+    const diaSemana = hoje.getDay();
+    if (diaSemana !== 0 && diaSemana !== 6) {
+      diasAdicionados++;
+    }
+  }
+  return hoje.toLocaleDateString("pt-BR");
+}
+
   </script>
 </body>
 </html>
