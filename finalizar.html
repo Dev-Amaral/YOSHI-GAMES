@@ -3,81 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <title>Finalizar Compra</title>
-  <link rel="stylesheet" href="style.css">
   <style>
-    a {
-      text-decoration: none;
-      color: white;
-    }
-    #lista-pedidos{
-        display: flex;
-        flex-direction: row;
-    }
-
     body {
-      background-color: #162464;
-      color: white;
-      font-family: monospace;
-      padding: 20px;
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
     }
 
-    .pedido {
-      border: 1px solid #fff;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
-      /* margin-right: 1000px; */
-      margin: 30px;
-      width: 900px;
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5em;
+      color: #61dafb;
+    }
+
+    .tabela-carrinho {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .item-carrinho {
       display: flex;
       justify-content: space-between;
+      background: linear-gradient(135deg, #333, #444);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       align-items: center;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .capa{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-
+    .item-carrinho:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
     }
-    .btn-comprar {
-      background-color: green;
+
+    .item-carrinho img {
+      height: 120px;
+      border-radius: 10px;
+      margin-right: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .informacoes-item {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .informacoes-item h3 {
+      margin: 0;
+      font-size: 1.4em;
+      color: #f1f1f1;
+    }
+
+    .informacoes-item p {
+      margin: 5px 0;
+      color: #bbb;
+      font-size: 1.1em;
+    }
+
+    .plataforma {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #61dafb;
+    }
+
+    .quantidade,
+    .preco {
+      font-size: 1.2em;
+      text-align: center;
+      color: #f1f1f1;
+    }
+
+    .quantidade button {
+      background-color: #444;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      padding: 8px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
+      transition: background 0.3s;
     }
 
-    .btn-comprar:hover {
-      background-color: darkgreen;
-      transform: scale(1.05);
+    .quantidade button:hover {
+      background-color: #555;
     }
 
-    .remover-btn {
+    .acoes {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      background-color: #444;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1em;
+    }
+
+    .btn:hover {
+      background-color: #555;
+    }
+
+    .btn-remove {
       background-color: crimson;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
     }
 
-    .remover-btn:hover {
+    .btn-remove:hover {
       background-color: darkred;
-      transform: scale(1.1);
     }
 
-    /* Modal Estilizado */
+    .btn-finalizar {
+      background-color: #61dafb;
+      color: white;
+      font-size: 1.2em;
+      padding: 12px 25px;
+      border-radius: 8px;
+      width: auto;
+      margin-top: 30px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-finalizar:hover {
+      background-color: #4fa3d1;
+    }
+
+    #total-pedido {
+      text-align: right;
+      font-size: 1.4em;
+      margin-top: 20px;
+      padding-right: 500px;
+      font-weight: bold;
+      color: #f1f1f1;
+    }
+
+    /* Modal */
     .modal {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
       display: none;
       justify-content: center;
       align-items: center;
@@ -85,13 +163,12 @@
     }
 
     .modal-conteudo {
-      background-color: #1e1e2f;
+      background-color: #444;
       padding: 30px;
       border-radius: 10px;
       text-align: center;
       color: white;
-      font-family: monospace;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      font-size: 1.2em;
     }
 
     .botoes {
@@ -100,36 +177,27 @@
       justify-content: center;
       gap: 20px;
     }
-    img{
-        height: 100px;
-    }
 
-    .cancelar {
-      background-color: crimson;
-    }
-
-    .cancelar:hover {
-      background-color: darkred;
-    }
   </style>
 </head>
 <body>
   <h1>🛍️ Finalizar Compra</h1>
-  <div id="lista-pedidos">
 
-  </div>
-  <p id="total-pedido" style="display: flex;"></p>
-  <button class="btn-comprar" onclick="mostrarModal()">Comprar</button>
-  <button class="btn-comprar"><a href="homepage.html">Voltar</a></button>
+  <div class="tabela-carrinho" id="lista-pedidos"></div>
 
-  <!-- Modal de confirmação -->
+  <p id="total-pedido"></p>
+  <div style="padding-left: 330px;">
+  <button class="btn-finalizar" onclick="mostrarModal()">Finalizar Compra</button>
+  <button class="btn-finalizar" onclick="window.location.href='homepage.html'">Voltar</button>
+</div>
+  <!-- Modal -->
   <div id="modal-confirmacao" class="modal">
     <div class="modal-conteudo">
-      <h2>Confirmar compra</h2>
+      <h2>Confirmar Compra</h2>
       <p>Tem certeza que deseja finalizar sua compra?</p>
       <div class="botoes">
-        <button class="btn-comprar" onclick="confirmarCompra()">Confirmar</button>
-        <button class="btn-comprar cancelar" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-finalizar" onclick="confirmarCompra()">Confirmar</button>
+        <button class="btn-finalizar btn-remove" onclick="fecharModal()">Cancelar</button>
       </div>
     </div>
   </div>
@@ -137,33 +205,52 @@
   <script>
     let carrinho = JSON.parse(localStorage.getItem("carrinhoFinalizado")) || [];
 
-    const lista = document.getElementById("lista-pedidos");
-    const totalPedido = document.getElementById("total-pedido");
-
     function renderizarCarrinho() {
-      lista.innerHTML = "";
+      const listaPedidos = document.getElementById("lista-pedidos");
+      listaPedidos.innerHTML = "";
       let total = 0;
 
       carrinho.forEach((item, index) => {
-        total += item.preco;
-        lista.innerHTML += `
-          <div class="pedido">
-            <div class="capa">
-                <img src="${item.imagem}">
-              <strong ><p style="font-size:30px; margin:19px;">${item.nome}</strong></p><br>
-              <p style="font-size:30px; margin:19px;">Preço: R$ ${item.preco.toFixed(2)}</p>
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+
+        listaPedidos.innerHTML += `
+          <div class="item-carrinho">
+            <img src="${item.imagem}" alt="${item.nome}">
+            <div class="informacoes-item">
+              <h3>${item.nome}</h3>
+              <p>Empresa: ${item.empresa || "—"}</p>
+              <p class="plataforma">${item.plataforma || "Plataforma: Não disponível"}</p>
             </div>
-            <button class="remover-btn" onclick="removerItem(${index})">✕</button>
+            <div class="quantidade">
+              <button onclick="alterarQuantidade(${index}, -1)">−</button>
+              ${item.quantidade}
+              <button onclick="alterarQuantidade(${index}, 1)">+</button>
+            </div>
+            <div class="preco">
+              <p>R$ ${subtotal.toFixed(2)}</p>
+            </div>
+            <div class="acoes">
+              <button class="btn btn-remove" onclick="removerItem(${index})">✕</button>
+            </div>
           </div>
         `;
       });
 
-      totalPedido.innerHTML = `<strong><p>Total:</strong> R$ ${total.toFixed(2)}</p>`;
+      document.getElementById("total-pedido").innerHTML = `Total: R$ ${total.toFixed(2)}`;
+    }
+
+    function alterarQuantidade(index, delta) {
+      if (carrinho[index].quantidade + delta >= 1) {
+        carrinho[index].quantidade += delta;
+        salvarCarrinho();
+        renderizarCarrinho();
+      }
     }
 
     function removerItem(index) {
       carrinho.splice(index, 1);
-      localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
+      salvarCarrinho();
       renderizarCarrinho();
     }
 
@@ -180,28 +267,16 @@
     }
 
     function confirmarCompra() {
-      alert("Compra realizada com sucesso! 🎉");
+      alert("Confirmar endereço de envio");
       localStorage.removeItem("carrinhoFinalizado");
-      window.location.href = "index.html";
+      window.location.href = "informacoes pessoais/envio.html";
+    }
+
+    function salvarCarrinho() {
+      localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
     }
 
     renderizarCarrinho();
-    const previsao = calcularDataEntrega();
-totalPedido.innerHTML += `<br><br><p><strong>📦 Entrega prevista até:</strong><p> ${previsao}`;
-
-    function calcularDataEntrega() {
-  const hoje = new Date();
-  let diasAdicionados = 0;
-  while (diasAdicionados < 5) {
-    hoje.setDate(hoje.getDate() + 1);
-    const diaSemana = hoje.getDay();
-    if (diaSemana !== 0 && diaSemana !== 6) {
-      diasAdicionados++;
-    }
-  }
-  return hoje.toLocaleDateString("pt-BR");
-}
-
   </script>
 </body>
 </html>

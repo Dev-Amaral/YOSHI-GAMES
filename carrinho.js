@@ -1,7 +1,5 @@
-
 let carrinho = [];
 
-// Tenta carregar do localStorage quando o script for iniciado
 function carregarCarrinho() {
   const carrinhoSalvo = localStorage.getItem("carrinho");
   if (carrinhoSalvo) {
@@ -9,51 +7,68 @@ function carregarCarrinho() {
   }
 }
 
-
-function adicionarAoCarrinho(item) {
-  carrinho.push(item);
+function adicionarAoCarrinho(novoItem) {
+  const indexExistente = carrinho.findIndex(item => item.id === novoItem.id);
+  if (indexExistente !== -1) {
+    carrinho[indexExistente].quantidade += 1;
+  } else {
+    carrinho.push({ ...novoItem, quantidade: 1 });
+  }
   salvarCarrinho();
   atualizarCarrinho();
 }
 
-function removerDoCarrinho(index) {
-  carrinho.splice(index, 1);
+function alterarQuantidade(index, delta) {
+  carrinho[index].quantidade += delta;
+
+  if (carrinho[index].quantidade <= 0) {
+    carrinho.splice(index, 1);
+  }
+
   salvarCarrinho();
   atualizarCarrinho();
 }
-
 
 function atualizarCarrinho() {
   const container = document.getElementById("carrinho");
   container.innerHTML = `
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>🛒 Carrinho</h2>
-    <button onclick="fecharCarrinho()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">✕</button>
-  </div>
-`;
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>🛒 Carrinho</h2>
+      <button onclick="fecharCarrinho()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">✕</button>
+    </div>
+  `;
 
-  
   carrinho.forEach((item, index) => {
     container.innerHTML += `
       <div class="item-carrinho">
-        <img src="${item.imagem}" />
-        <span>${item.nome}<br>R$ ${item.preco.toFixed(2)}</span>
-        <button onclick="removerDoCarrinho(${index})">✕</button>
+        <img style="height:70px;" src="${item.imagem}" />
+        <span>
+          <p style="font-size:20px;">${item.nome}</p>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 16px;">
+            <button onclick="alterarQuantidade(${index}, -1)">➖</button>
+            <span><strong>${item.quantidade}</strong></span>
+            <button onclick="alterarQuantidade(${index}, 1)">➕</button>
+            <span>R$ ${(item.preco * item.quantidade).toFixed(2)}</span>
+          </div>
+        </span>
       </div>
     `;
   });
 
-
-  const total = carrinho.reduce((soma, item) => soma + item.preco, 0);
+  const total = carrinho.reduce((soma, item) => soma + item.preco * item.quantidade, 0);
   container.innerHTML += `
-  <hr>
-  <p><strong>Total:</strong> R$ ${total.toFixed(2)}</p>
-  <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
-`;
-
-  container.innerHTML += `<hr><p><strong>Total:</strong> R$ ${total.toFixed(2)}</p>`;
+    <hr>
+    <p style="font-size:20px;"><strong>Total:</strong> R$ ${total.toFixed(2)}</p>
+    <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+  `;
 }
+
 function finalizarCompra() {
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio! Adicione algum produto antes de finalizar a compra.");
+    return;
+  }
+
   localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
   window.open("finalizar.html", "_blank");
 }
@@ -61,13 +76,6 @@ function finalizarCompra() {
 
 function salvarCarrinho() {
   localStorage.setItem("carrinho", JSON.stringify(carrinho));
-}
-
-function carregarCarrinho() {
-  const carrinhoSalvo = localStorage.getItem("carrinho");
-  if (carrinhoSalvo) {
-    carrinho = JSON.parse(carrinhoSalvo);
-  }
 }
 
 function toggleCarrinho() {
@@ -79,7 +87,11 @@ function fecharCarrinho() {
   document.getElementById("carrinho").style.display = "none";
 }
 
-// Carrega o carrinho assim que a página for aberta
+// Início
 carregarCarrinho();
 atualizarCarrinho();
-
+// Quando voltar para a página inicial, recarregar o carrinho
+window.addEventListener('load', () => {
+  carregarCarrinho();
+  atualizarCarrinho();
+});

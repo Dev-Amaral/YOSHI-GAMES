@@ -139,3 +139,43 @@ body{
     transform: scale(1.2);
   }
   
+  /* Estilos para o pop-up */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 128, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    font-size: 16px;
+  }
+  
+  /* Estilos para o ícone do carrinho com a quantidade */
+  .btn-carrinho {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-carrinho img {
+    height: 30px;
+  }
+  
+  #quantidade-carrinho {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
