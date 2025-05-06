@@ -7,6 +7,27 @@ function carregarCarrinho() {
   }
 }
 
+function salvarCarrinho() {
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  atualizarContadorCarrinho();
+}
+
+function atualizarContadorCarrinho() {
+  const contador = document.getElementById("contador-carrinho");
+  if (!contador || !Array.isArray(carrinho)) return;
+
+  let totalItens = 0;
+
+  for (const item of carrinho) {
+    const qtd = parseInt(item.quantidade);
+    if (!isNaN(qtd)) {
+      totalItens += qtd;
+    }
+  }
+
+  contador.innerText = totalItens;
+}
+
 function adicionarAoCarrinho(novoItem) {
   const indexExistente = carrinho.findIndex(item => item.id === novoItem.id);
   if (indexExistente !== -1) {
@@ -14,8 +35,11 @@ function adicionarAoCarrinho(novoItem) {
   } else {
     carrinho.push({ ...novoItem, quantidade: 1 });
   }
+
   salvarCarrinho();
-  atualizarCarrinho();
+
+  // Em vez de abrir o carrinho lateral, redireciona para a página de finalizar
+  window.location.href = "finalizar.html";
 }
 
 function alterarQuantidade(index, delta) {
@@ -26,41 +50,63 @@ function alterarQuantidade(index, delta) {
   }
 
   salvarCarrinho();
-  atualizarCarrinho();
+  renderizarCarrinho();
 }
 
-function atualizarCarrinho() {
-  const container = document.getElementById("carrinho");
-  container.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h2>🛒 Carrinho</h2>
-      <button onclick="fecharCarrinho()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">✕</button>
-    </div>
-  `;
+function removerItem(index) {
+  carrinho.splice(index, 1);
+  salvarCarrinho();
+  renderizarCarrinho();
+}
+
+function renderizarCarrinho() {
+  const listaPedidos = document.getElementById("lista-pedidos");
+  if (!listaPedidos) return;
+
+  listaPedidos.innerHTML = "";
+  let total = 0;
 
   carrinho.forEach((item, index) => {
-    container.innerHTML += `
+    const subtotal = item.preco * item.quantidade;
+    total += subtotal;
+
+    listaPedidos.innerHTML += `
       <div class="item-carrinho">
-        <img style="height:70px;" src="${item.imagem}" />
-        <span>
-          <p style="font-size:20px;">${item.nome}</p>
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 16px;">
-            <button onclick="alterarQuantidade(${index}, -1)">➖</button>
-            <span><strong>${item.quantidade}</strong></span>
-            <button onclick="alterarQuantidade(${index}, 1)">➕</button>
-            <span>R$ ${(item.preco * item.quantidade).toFixed(2)}</span>
-          </div>
-        </span>
+        <img src="${item.imagem}" alt="${item.nome}">
+        <div class="informacoes-item">
+          <h3>${item.nome}</h3>
+          <p class="plataforma">Plataforma: ${detectarPlataforma(item.nome)}</p>
+        </div>
+        <div class="quantidade">
+          <button onclick="alterarQuantidade(${index}, -1)">-</button>
+          ${item.quantidade}
+          <button onclick="alterarQuantidade(${index}, 1)">+</button>
+        </div>
+        <div class="preco">R$ ${subtotal.toFixed(2)}</div>
+        <div class="acoes">
+          <button class="btn btn-remove" onclick="removerItem(${index})">Remover</button>
+        </div>
       </div>
     `;
   });
 
-  const total = carrinho.reduce((soma, item) => soma + item.preco * item.quantidade, 0);
-  container.innerHTML += `
-    <hr>
-    <p style="font-size:20px;"><strong>Total:</strong> R$ ${total.toFixed(2)}</p>
-    <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
-  `;
+  const container = document.getElementById("resumo-pedido");
+  if (container) {
+    container.innerHTML = `
+      <hr>
+      <p style="font-size:20px;"><strong>Total:</strong> R$ ${total.toFixed(2)}</p>
+      <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+    `;
+  }
+
+  atualizarContadorCarrinho();
+}
+
+function detectarPlataforma(nome) {
+  if (nome.includes("PS4") || nome.includes("PS5")) return "PlayStation";
+  if (nome.includes("Xbox")) return "Xbox";
+  if (nome.includes("Nintendo")) return "Nintendo Switch";
+  return "Multiplataforma";
 }
 
 function finalizarCompra() {
@@ -70,28 +116,15 @@ function finalizarCompra() {
   }
 
   localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
-  window.open("finalizar.html", "_blank");
+  alert("Compra finalizada!");
+  carrinho = [];
+  salvarCarrinho();
+  renderizarCarrinho();
 }
 
-
-function salvarCarrinho() {
-  localStorage.setItem("carrinho", JSON.stringify(carrinho));
-}
-
-function toggleCarrinho() {
-  const carrinho = document.getElementById("carrinho");
-  carrinho.style.display = carrinho.style.display === "none" ? "block" : "none";
-}
-
-function fecharCarrinho() {
-  document.getElementById("carrinho").style.display = "none";
-}
-
-// Início
-carregarCarrinho();
-atualizarCarrinho();
-// Quando voltar para a página inicial, recarregar o carrinho
+// Inicialização
 window.addEventListener('load', () => {
   carregarCarrinho();
-  atualizarCarrinho();
+  atualizarContadorCarrinho();
+  renderizarCarrinho();
 });

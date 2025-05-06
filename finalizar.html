@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Finalizar Compra</title>
   <style>
+
+
     body {
       background-color: #1f1f1f;
       color: #f0f0f0;
@@ -150,7 +152,6 @@
       color: #f1f1f1;
     }
 
-    /* Modal */
     .modal {
       position: fixed;
       top: 0; left: 0;
@@ -177,19 +178,103 @@
       justify-content: center;
       gap: 20px;
     }
+    @media screen and (max-width: 1024px) and (min-width: 768px) {
+  .item-carrinho {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .item-carrinho img {
+    margin: 0 auto 15px;
+    height: 100px;
+  }
+
+  .informacoes-item {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .quantidade, .preco, .acoes {
+    align-self: center;
+    margin: 5px 0;
+  }
+
+  .tabela-carrinho {
+    padding: 0 10px;
+  }
+
+  #total-pedido {
+    text-align: center;
+    padding: 0;
+  }
+
+  .btn-finalizar {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
+    display: block;
+  }
+
+  .botoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.container {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 15px;
+      flex-wrap: wrap;
+      background-color: #222;
+    }
+.links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .logotipo img {
+      height: 60px;
+    }
+    .links {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .nome-site {
+      font-size: 2rem;
+      font-weight: bold;
+    }
 
   </style>
 </head>
 <body>
+  <div class="container">
+    <div class="logotipo YOSHI"><img src="img/yoshi logo.png" alt="Logo"></div>
+    <div class="nome-site">YOSHI GAMES</div>
+    <div class="links">
+      <a href="informacoes pessoais/envio.html">Informações de envio</a>
+      <a href="index.html">Login</a>
+      <a href="ajuda.html">Ajuda</a>
+      <a href="homepage.html">Início</a>
+    
+      
+      
+    </div>
+  </div>
+  <hr>
   <h1>🛍️ Finalizar Compra</h1>
 
   <div class="tabela-carrinho" id="lista-pedidos"></div>
 
   <p id="total-pedido"></p>
   <div style="padding-left: 330px;">
-  <button class="btn-finalizar" onclick="mostrarModal()">Finalizar Compra</button>
-  <button class="btn-finalizar" onclick="window.location.href='homepage.html'">Voltar</button>
-</div>
+    <button class="btn-finalizar" onclick="mostrarModal()">Finalizar Compra</button>
+    <button class="btn-finalizar" onclick="window.location.href='homepage.html'">Voltar</button>
+  </div>
+
   <!-- Modal -->
   <div id="modal-confirmacao" class="modal">
     <div class="modal-conteudo">
@@ -203,7 +288,7 @@
   </div>
 
   <script>
-    let carrinho = JSON.parse(localStorage.getItem("carrinhoFinalizado")) || [];
+    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 
     function renderizarCarrinho() {
       const listaPedidos = document.getElementById("lista-pedidos");
@@ -241,11 +326,12 @@
     }
 
     function alterarQuantidade(index, delta) {
-      if (carrinho[index].quantidade + delta >= 1) {
-        carrinho[index].quantidade += delta;
-        salvarCarrinho();
-        renderizarCarrinho();
+      carrinho[index].quantidade += delta;
+      if (carrinho[index].quantidade <= 0) {
+        carrinho.splice(index, 1);
       }
+      salvarCarrinho();
+      renderizarCarrinho();
     }
 
     function removerItem(index) {
@@ -268,12 +354,12 @@
 
     function confirmarCompra() {
       alert("Confirmar endereço de envio");
-      localStorage.removeItem("carrinhoFinalizado");
+      localStorage.removeItem("carrinho");
       window.location.href = "informacoes pessoais/envio.html";
     }
 
     function salvarCarrinho() {
-      localStorage.setItem("carrinhoFinalizado", JSON.stringify(carrinho));
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
     }
 
     renderizarCarrinho();

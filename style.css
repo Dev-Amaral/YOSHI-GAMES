@@ -72,7 +72,7 @@ body{
 .btn-download:hover{
     transform: scale(1.2);
 }
-.carrinho-lateral {
+/* .carrinho-lateral {
     position: fixed;
     top: 100px;
     right: 20px;
@@ -85,7 +85,7 @@ body{
     z-index: 999;
     max-height: 80vh;
     overflow-y: auto;
-}
+} */
 .item-carrinho {
     display: flex;
     align-items: center;
@@ -177,5 +177,65 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+    }
+  
+    .logotipo {
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+  
+    .nome-site {
+      font-size: 28px;
+      margin-left: 0;
+      justify-content: center;
+    }
+  
+    .links {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+  
+    .links a {
+      margin-right: 0;
+      font-size: 18px;
+    }
+  
+    .btn-carrinho {
+      margin-left: 0;
+    }
+  
+    .games {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .img-game {
+      height: auto;
+      width: 90%;
+      max-width: 300px;
+    }
+  
+    .card-title {
+      font-size: 20px;
+    }
+  
+    .btn-download {
+      font-size: 18px;
+      padding: 8px;
+    }
+  
+    .carrinho-lateral {
+      width: 90%;
+      right: 5%;
+    }
   }
   
